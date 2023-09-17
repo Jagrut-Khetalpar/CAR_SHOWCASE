@@ -1,0 +1,69 @@
+"use client"
+
+import React, { useState } from 'react'
+import Image from 'next/image'
+
+
+import SearchManufacturer from './SearchManufacturer'
+import { useRouter } from 'next/navigation'
+
+const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
+    <button type='submit' className={`-ml-2 z-10 ${otherClasses}`} aria-label='submit-button' >
+        <Image
+            src="/magnifying-glass.svg"
+            alt='magnifying glass'
+            width={40}
+            height={40}
+            className='object-contain' />
+    </button>
+)
+
+const SearchBar = ({ setManufacturer, setModel }) => {
+    const router = useRouter()
+
+    const [searchManufacturer, setSearchManufacturer] = useState('');
+    const [searchModel, setSearchModel] = useState('');
+
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (searchManufacturer === '' && searchModel === '') {
+            return alert('Please fill in search bar')
+        };
+        setSearchModel(searchModel)
+        setManufacturer(searchManufacturer)
+
+    }
+
+
+    return (
+        <form className='searchbar' onSubmit={handleSearch}>
+            <div className="searchbar__item">
+                <SearchManufacturer
+                    selected={searchManufacturer}
+                    setSelected={setSearchManufacturer} />
+                <SearchButton otherClasses='sm:hidden' />
+            </div>
+            <div className="searchbar__item">
+                <Image
+                    src='/model-icon.png'
+                    alt='car model'
+                    width={25}
+                    height={25}
+                    className='absolute w-[20px] h-[20px] ml-4'
+                />
+                <input
+                    type="text"
+                    name="searchModel"
+                    value={searchModel}
+                    id=""
+                    onChange={e => setSearchModel(e.target.value)}
+                    placeholder='Taiguan'
+                    className='searchbar__input' />
+                <SearchButton otherClasses='sm:hidden' />
+            </div>
+            <SearchButton otherClasses='max-sm:hidden' />
+        </form>
+    )
+}
+
+export default SearchBar
